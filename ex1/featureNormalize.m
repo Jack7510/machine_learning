@@ -26,10 +26,13 @@ sigma = zeros(1, size(X, 2));
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
 
+m = size(X, 1);
+mu = mean(X);
+sigma = std(X);
 
-% add new features
-
-
+for iter = 1:m
+    X_norm(iter, :) = (X(iter, :) - mu) ./ sigma;
+end
 
 
 
