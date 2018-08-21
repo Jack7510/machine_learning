@@ -62,9 +62,24 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+X = [ones(m, 1) X];
+% Part 1
+for i = 1:m
+    a2 = sigmoid(Theta1 * X(i,:)');
 
+    a2 = [1; a2];
+    a3 = sigmoid(Theta2 * a2);
 
+    % construt y variable
+    y_temp = zeros(num_labels, 1);
+    y_temp(y(i,1)) = 1;
+    J = J + sum(-1 * y_temp .* log(a3) - (1 - y_temp) .* log( 1 - a3 ));
+end
+J = J / m;
 
+% add regularization, remove theta(0) while is bias
+J = J + lambda / (2 * m) * (sum((Theta1 .^ 2)(:)) - sum((Theta1(:,1) .^ 2)) ...
+                          + sum((Theta2 .^ 2)(:)) - sum((Theta2(:,1) .^ 2)) );
 
 
 
