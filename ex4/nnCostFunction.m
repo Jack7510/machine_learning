@@ -81,7 +81,36 @@ J = J / m;
 J = J + lambda / (2 * m) * (sum((Theta1 .^ 2)(:)) - sum((Theta1(:,1) .^ 2)) ...
                           + sum((Theta2 .^ 2)(:)) - sum((Theta2(:,1) .^ 2)) );
 
+% Part 2
+for t = 1:m
+    % calc z2, a2
+    a1 = X(t,:)';
+    z2 = Theta1 * a1;
+    a2 = sigmoid(z2);
 
+    % calc z3, a3
+    a2 = [1; a2];
+    z3 = Theta2 * a2;
+    a3 = sigmoid(z3);
+
+    % calc sigma_3k
+    % construt y variable
+    y_temp = zeros(num_labels, 1);
+    y_temp(y(t,1)) = 1;
+    sigma_3k = a3 - y_temp;
+    
+    % calc sigma_2k
+    sigma_2k = Theta2(:,2:end)' * sigma_3k .* sigmoidGradient(z2);
+    
+    % calc delta_1, delta_2
+    Theta2_grad = Theta2_grad + sigma_3k * a2';
+    Theta1_grad = Theta1_grad + sigma_2k * a1';
+end
+
+
+% Part 3
+Theta1_grad = Theta1_grad / m + lambda / m * [zeros(size(Theta1,1), 1) Theta1(:, 2:end)];
+Theta2_grad = Theta2_grad / m + lambda / m * [zeros(size(Theta2,1), 1) Theta2(:, 2:end)];
 
 
 
